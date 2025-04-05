@@ -1,110 +1,85 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Toque na Bolinha</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<!-- PWA: https://bsehovac.github.io/the-cube/ -->
 
-    body {
-      font-family: sans-serif;
-      background: linear-gradient(to bottom right, #6366f1, #8b5cf6);
-      color: white;
-      text-align: center;
-      height: 100vh;
-      overflow: hidden;
-    }
+<div class="ui">
 
-    .score-board {
-      margin-top: 20px;
-      font-size: 24px;
-      font-weight: bold;
-    }
+  <div class="ui__background"></div>
 
-    .timer {
-      margin: 10px 0 20px;
-      font-size: 18px;
-    }
+  <div class="ui__game"></div>
 
-    .ball {
-      position: absolute;
-      background-color: white;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
+  <div class="ui__texts">
+    <h1 class="text text--title">
+      <span>THE</span>
+      <span>CUBE</span>
+    </h1>
+    <div class="text text--note">
+      Double tap to start
+    </div>
+    <div class="text text--timer">
+      0:00
+    </div>
+    <div class="text text--complete">
+      <span>Complete!</span>
+    </div>
+    <div class="text text--best-time">
+      <icon trophy></icon>
+      <span>Best Time!</span>
+    </div>
+  </div>
 
-    .end-message {
-      font-size: 30px;
-      font-weight: bold;
-      margin-top: 40px;
-    }
-  </style>
-</head>
-<body>
-  <div class="score-board">Pontuação: <span id="score">0</span></div>
-  <div class="timer">Tempo restante: <span id="time">30</span>s</div>
-  <div id="game"></div>
+  <div class="ui__prefs">
+    <range name="size" title="Cube Size" list="2,3,4,5"></range>
+    <range name="flip" title="Flip Type" list="Swift&nbsp;,Smooth,Bounce"></range>
+    <range name="scramble" title="Scramble Length" list="20,25,30"></range>
+    <range name="fov" title="Camera Angle" list="Ortographic,Perspective"></range>
+    <range name="theme" title="Color Scheme" list="Cube,Erno,Dust,Camo,Rain"></range>
+  </div>
 
-  <script>
-    const game = document.getElementById('game');
-    const scoreEl = document.getElementById('score');
-    const timeEl = document.getElementById('time');
+  <div class="ui__theme">
+    <range name="hue" title="Hue" color></range>
+    <range name="saturation" title="Saturation" color></range>
+    <range name="lightness" title="Lightness" color></range>
+  </div>
 
-    let score = 0;
-    let timeLeft = 30;
-    let ballSize = 80;
-    let interval;
+  <div class="ui__stats">
+    <div class="stats" name="cube-size">
+      <i>Cube:</i><b>3x3x3</b>
+    </div>
+    <div class="stats" name="total-solves">
+      <i>Total solves:</i><b>-</b>
+    </div>
+    <div class="stats" name="best-time">
+      <i>Best time:</i><b>-</b>
+    </div>
+    <div class="stats" name="worst-time">
+      <i>Worst time:</i><b>-</b>
+    </div>
+    <div class="stats" name="average-5">
+      <i>Average of 5:</i><b>-</b>
+    </div>
+    <div class="stats" name="average-12">
+      <i>Average of 12:</i><b>-</b>
+    </div>
+    <div class="stats" name="average-25">
+      <i>Average of 25:</i><b>-</b>
+    </div>
+  </div>
 
-    function startGame() {
-      interval = setInterval(() => {
-        timeLeft--;
-        timeEl.textContent = timeLeft;
-        if (timeLeft <= 0) {
-          clearInterval(interval);
-          endGame();
-        }
-      }, 1000);
-      spawnBall();
-    }
+  <div class="ui__buttons">
+    <button class="btn btn--bl btn--stats">
+      <icon trophy></icon>
+    </button>
+    <button class="btn btn--br btn--prefs">
+      <icon settings></icon>
+    </button>
+    <button class="btn btn--bl btn--back">
+      <icon back></icon>
+    </button>
+    <button class="btn btn--br btn--theme">
+      <icon theme></icon>
+    </button>
+    <button class="btn btn--br btn--reset">
+      <icon reset></icon>
+    </button>
+  </div>
 
-    function spawnBall() {
-      if (timeLeft <= 0) return;
-
-      const ball = document.createElement('div');
-      ball.classList.add('ball');
-      ball.style.width = ballSize + 'px';
-      ball.style.height = ballSize + 'px';
-
-      const maxTop = window.innerHeight - ballSize;
-      const maxLeft = window.innerWidth - ballSize;
-      const top = Math.random() * maxTop;
-      const left = Math.random() * maxLeft;
-
-      ball.style.top = `${top}px`;
-      ball.style.left = `${left}px`;
-
-      ball.onclick = () => {
-        score++;
-        scoreEl.textContent = score;
-        ball.remove();
-        if (ballSize > 30) ballSize -= 2;
-        spawnBall();
-      };
-
-      game.appendChild(ball);
-    }
-
-    function endGame() {
-      game.innerHTML = `<div class="end-message">Fim de jogo!<br>Pontuação final: ${score}</div>`;
-    }
-
-    window.onload = startGame;
-  </script>
-</body>
-</html>
+</div>
