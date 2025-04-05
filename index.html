@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Toque na Bolinha</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: sans-serif;
+      background: linear-gradient(to bottom right, #6366f1, #8b5cf6);
+      color: white;
+      text-align: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .score-board {
+      margin-top: 20px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .timer {
+      margin: 10px 0 20px;
+      font-size: 18px;
+    }
+
+    .ball {
+      position: absolute;
+      background-color: white;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .end-message {
+      font-size: 30px;
+      font-weight: bold;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <div class="score-board">Pontuação: <span id="score">0</span></div>
+  <div class="timer">Tempo restante: <span id="time">30</span>s</div>
+  <div id="game"></div>
+
+  <script>
+    const game = document.getElementById('game');
+    const scoreEl = document.getElementById('score');
+    const timeEl = document.getElementById('time');
+
+    let score = 0;
+    let timeLeft = 30;
+    let ballSize = 80;
+    let interval;
+
+    function startGame() {
+      interval = setInterval(() => {
+        timeLeft--;
+        timeEl.textContent = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(interval);
+          endGame();
+        }
+      }, 1000);
+      spawnBall();
+    }
+
+    function spawnBall() {
+      if (timeLeft <= 0) return;
+
+      const ball = document.createElement('div');
+      ball.classList.add('ball');
+      ball.style.width = ballSize + 'px';
+      ball.style.height = ballSize + 'px';
+
+      const maxTop = window.innerHeight - ballSize;
+      const maxLeft = window.innerWidth - ballSize;
+      const top = Math.random() * maxTop;
+      const left = Math.random() * maxLeft;
+
+      ball.style.top = `${top}px`;
+      ball.style.left = `${left}px`;
+
+      ball.onclick = () => {
+        score++;
+        scoreEl.textContent = score;
+        ball.remove();
+        if (ballSize > 30) ballSize -= 2;
+        spawnBall();
+      };
+
+      game.appendChild(ball);
+    }
+
+    function endGame() {
+      game.innerHTML = `<div class="end-message">Fim de jogo!<br>Pontuação final: ${score}</div>`;
+    }
+
+    window.onload = startGame;
+  </script>
+</body>
+</html>
